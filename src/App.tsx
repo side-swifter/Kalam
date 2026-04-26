@@ -91,7 +91,7 @@ function App() {
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-10">
           <a href="#top" className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center overflow-hidden border-2 border-[#f97316] bg-[#facc15] shadow-[0_8px_24px_rgba(249,115,22,0.22)]">
-              <img src="/kalam project.jpeg" alt="Kalam Project" className="logo-warm h-full w-full object-cover" />
+              <img src="/kalam-project.jpeg" alt="Kalam Project" className="logo-warm h-full w-full object-cover" />
             </div>
             <div>
               <p className="text-sm font-semibold tracking-wide text-[#241300] sm:text-base">The Kalam Project</p>
@@ -458,7 +458,7 @@ function App() {
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 sm:flex-row sm:items-center">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 overflow-hidden border-2 border-[#f97316] bg-[#facc15]">
-              <img src="/kalam project.jpeg" alt="Kalam Project" className="logo-warm h-full w-full object-cover" />
+              <img src="/kalam-project.jpeg" alt="Kalam Project" className="logo-warm h-full w-full object-cover" />
             </div>
             <p className="text-sm font-semibold text-[#6b3f00]/70">The Kalam Project</p>
           </div>
