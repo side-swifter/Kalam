@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #fffaf0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+::selection {
+  background: #facc15;
+  color: #241300;
+}
+
+.technical-grid {
+  background-image:
+    linear-gradient(rgba(249, 115, 22, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 115, 22, 0.16) 1px, transparent 1px);
+  background-size: 52px 52px;
+  animation: grid-drift 24s linear infinite;
+}
+
+.section-kicker {
+  color: #f97316;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  margin-top: 0.75rem;
+  max-width: 48rem;
+  color: #241300;
+  font-size: clamp(2.35rem, 5vw, 4.5rem);
+  line-height: 0.98;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.form-field {
+  width: 100%;
+  border: 1px solid rgba(249, 115, 22, 0.24);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 1rem 1.1rem;
+  color: #241300;
+  font-weight: 650;
+  outline: none;
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.form-field::placeholder {
+  color: rgba(107, 63, 0, 0.52);
+}
+
+.form-field:focus {
+  border-color: #facc15;
+  background: rgba(255, 243, 214, 0.95);
+}
+
+.form-field option {
+  color: #241300;
+}
+
+.logo-warm {
+  filter: saturate(1.35) sepia(0.18) hue-rotate(342deg) contrast(1.08);
+}
+
+@keyframes grid-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(52px, 52px, 0);
+  }
+}
