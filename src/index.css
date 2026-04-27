@@ -18,6 +18,10 @@ body {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
+  --cursor-x: 50vw;
+  --cursor-y: 35vh;
+  --grid-shift-x: 0px;
+  --grid-shift-y: 0px;
 }
 
 ::selection {
@@ -30,6 +34,8 @@ html {
     linear-gradient(rgba(249, 115, 22, 0.16) 1px, transparent 1px),
     linear-gradient(90deg, rgba(249, 115, 22, 0.16) 1px, transparent 1px);
   background-size: 52px 52px;
+  transform: translate3d(var(--grid-shift-x), var(--grid-shift-y), 0);
+  transition: transform 240ms ease-out;
   animation: grid-drift 24s linear infinite;
 }
 
@@ -77,6 +83,108 @@ html {
 
 .logo-warm {
   filter: saturate(1.35) sepia(0.18) hue-rotate(342deg) contrast(1.08);
+}
+
+.cursor-dot,
+.cursor-halo,
+.cursor-spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+  transition:
+    opacity 160ms ease,
+    width 180ms ease,
+    height 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #f97316;
+  box-shadow:
+    0 0 0 4px rgba(250, 204, 21, 0.2),
+    0 0 18px rgba(249, 115, 22, 0.5);
+}
+
+.cursor-halo {
+  width: 42px;
+  height: 42px;
+  border-radius: 9999px;
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  background:
+    radial-gradient(circle, rgba(250, 204, 21, 0.24), transparent 56%),
+    radial-gradient(circle, rgba(249, 115, 22, 0.18), transparent 70%);
+  mix-blend-mode: multiply;
+}
+
+.cursor-spotlight {
+  z-index: 1;
+  width: 540px;
+  height: 540px;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle, rgba(250, 204, 21, 0.22), transparent 42%),
+    radial-gradient(circle, rgba(249, 115, 22, 0.18), transparent 64%);
+  filter: blur(10px);
+  mix-blend-mode: multiply;
+}
+
+html.cursor-active .cursor-dot,
+html.cursor-active .cursor-halo,
+html.cursor-active .cursor-spotlight {
+  opacity: 1;
+}
+
+html.cursor-hover .cursor-dot {
+  width: 10px;
+  height: 10px;
+  background: #facc15;
+  box-shadow:
+    0 0 0 5px rgba(249, 115, 22, 0.18),
+    0 0 22px rgba(249, 115, 22, 0.62);
+}
+
+html.cursor-hover .cursor-halo {
+  width: 68px;
+  height: 68px;
+  border-color: rgba(250, 204, 21, 0.75);
+  background:
+    radial-gradient(circle, rgba(250, 204, 21, 0.32), transparent 54%),
+    radial-gradient(circle, rgba(249, 115, 22, 0.22), transparent 72%);
+}
+
+html.cursor-pressed .cursor-dot {
+  width: 6px;
+  height: 6px;
+}
+
+html.cursor-pressed .cursor-halo {
+  width: 34px;
+  height: 34px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.cursor-active,
+  html.cursor-active * {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .cursor-dot,
+  .cursor-halo,
+  .cursor-spotlight {
+    display: none;
+  }
 }
 
 @keyframes grid-drift {

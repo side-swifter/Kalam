@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
@@ -67,6 +67,96 @@ const stats = [
   { value: '1:1', label: 'mentor feedback' }
 ]
 
+function CursorEffect() {
+  const dotRef = useRef<HTMLDivElement>(null)
+  const haloRef = useRef<HTMLDivElement>(null)
+  const spotlightRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches
+
+    if (reduceMotion || coarsePointer) {
+      return
+    }
+
+    const dot = dotRef.current
+    const halo = haloRef.current
+    const spotlight = spotlightRef.current
+
+    if (!dot || !halo || !spotlight) {
+      return
+    }
+
+    const root = document.documentElement
+    let targetX = window.innerWidth / 2
+    let targetY = window.innerHeight / 2
+    let haloX = targetX
+    let haloY = targetY
+    let animationFrame = 0
+
+    const setTransform = (element: HTMLDivElement, x: number, y: number) => {
+      element.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`
+    }
+
+    const animate = () => {
+      haloX += (targetX - haloX) * 0.16
+      haloY += (targetY - haloY) * 0.16
+      setTransform(dot, targetX, targetY)
+      setTransform(halo, haloX, haloY)
+      setTransform(spotlight, haloX, haloY)
+      animationFrame = window.requestAnimationFrame(animate)
+    }
+
+    const handlePointerMove = (event: PointerEvent) => {
+      targetX = event.clientX
+      targetY = event.clientY
+      root.style.setProperty('--cursor-x', `${targetX}px`)
+      root.style.setProperty('--cursor-y', `${targetY}px`)
+      root.style.setProperty('--grid-shift-x', `${(targetX / window.innerWidth - 0.5) * 18}px`)
+      root.style.setProperty('--grid-shift-y', `${(targetY / window.innerHeight - 0.5) * 18}px`)
+      root.classList.add('cursor-active')
+
+      const target = event.target
+      const isInteractive =
+        target instanceof Element &&
+        Boolean(target.closest('a, button, input, textarea, select, [role="button"]'))
+
+      root.classList.toggle('cursor-hover', isInteractive)
+    }
+
+    const handlePointerLeave = () => {
+      root.classList.remove('cursor-active', 'cursor-hover', 'cursor-pressed')
+    }
+
+    const handlePointerDown = () => root.classList.add('cursor-pressed')
+    const handlePointerUp = () => root.classList.remove('cursor-pressed')
+
+    animationFrame = window.requestAnimationFrame(animate)
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerleave', handlePointerLeave)
+    window.addEventListener('pointerdown', handlePointerDown)
+    window.addEventListener('pointerup', handlePointerUp)
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame)
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerleave', handlePointerLeave)
+      window.removeEventListener('pointerdown', handlePointerDown)
+      window.removeEventListener('pointerup', handlePointerUp)
+      root.classList.remove('cursor-active', 'cursor-hover', 'cursor-pressed')
+    }
+  }, [])
+
+  return (
+    <>
+      <div ref={haloRef} className="cursor-halo" />
+      <div ref={dotRef} className="cursor-dot" />
+      <div ref={spotlightRef} className="cursor-spotlight" />
+    </>
+  )
+}
+
 function App() {
   const [formData, setFormData] = useState({
     name: '',
@@ -84,6 +174,7 @@ function App() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#fffaf0] text-[#241300]">
+      <CursorEffect />
       <div className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(circle_at_20%_10%,rgba(250,204,21,0.14),transparent_28%),radial-gradient(circle_at_85%_20%,rgba(249,115,22,0.12),transparent_26%)]" />
       <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.06] technical-grid" />
 
