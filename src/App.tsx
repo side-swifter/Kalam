@@ -7,17 +7,22 @@ import {
   Clock3,
   Code2,
   Cpu,
+  DollarSign,
   Gauge,
   GraduationCap,
   Hammer,
+  HeartHandshake,
   Lightbulb,
   Mail,
   Rocket,
+  ShieldCheck,
   Sparkles,
   Trophy,
   Users,
   Wrench
 } from 'lucide-react'
+
+const donationUrl = 'https://hcb.hackclub.com/donations/start/the-kalam-project'
 
 const programs = [
   {
@@ -190,7 +195,7 @@ function App() {
             </div>
           </a>
           <div className="hidden items-center gap-1 md:flex">
-            {['About', 'Programs', 'Spots', 'Team'].map((item) => (
+            {['About', 'Programs', 'Spots', 'Team', 'Donate'].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
@@ -200,13 +205,21 @@ function App() {
               </a>
             ))}
           </div>
-          <a
-            href="#apply"
-            className="inline-flex items-center gap-2 border border-[#facc15] bg-[#facc15] px-4 py-2 text-sm font-bold text-[#241300] transition hover:bg-white"
-          >
-            Apply
-            <ArrowRight className="h-4 w-4" />
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href="#apply"
+              className="hidden items-center gap-2 border border-[#f4b24a]/25 px-4 py-2 text-sm font-bold text-[#241300] transition hover:border-[#f4b24a] hover:bg-white sm:inline-flex"
+            >
+              Apply
+            </a>
+            <a
+              href="#donate"
+              className="inline-flex items-center gap-2 border border-[#facc15] bg-[#facc15] px-4 py-2 text-sm font-bold text-[#241300] transition hover:bg-white"
+            >
+              Donate
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </nav>
 
@@ -242,6 +255,12 @@ function App() {
                   className="inline-flex items-center justify-center border border-[#f4b24a]/25 px-6 py-4 font-bold text-[#241300] transition hover:border-[#f4b24a] hover:bg-[#facc15]/20"
                 >
                   Explore tracks
+                </a>
+                <a
+                  href="#donate"
+                  className="inline-flex items-center justify-center border border-[#f97316]/35 px-6 py-4 font-bold text-[#241300] transition hover:border-[#f97316] hover:bg-white"
+                >
+                  Support Kalam
                 </a>
               </div>
               <div className="mt-12 grid max-w-2xl grid-cols-3 gap-3">
@@ -466,6 +485,61 @@ function App() {
                 </motion.div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section id="donate" className="border-y border-[#f4b24a]/10 bg-white px-5 py-20 sm:px-6 lg:px-10">
+          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center">
+            <div>
+              <p className="section-kicker">Donate</p>
+              <h2 className="section-title">Fund the parts, tools, and build time.</h2>
+              <p className="mt-6 max-w-xl text-base leading-8 text-[#704214]">
+                Donations help Kalam buy materials, electronics, fabrication supplies, competition
+                resources, and workshop equipment for student-led engineering projects.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={donationUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-[#facc15] px-6 py-4 font-black text-[#241300] transition hover:bg-[#fffaf0]"
+                >
+                  Donate through HCB
+                  <HeartHandshake className="h-5 w-5" />
+                </a>
+                <a
+                  href="#apply"
+                  className="inline-flex items-center justify-center border border-[#f4b24a]/25 px-6 py-4 font-bold text-[#241300] transition hover:border-[#f4b24a] hover:bg-[#fffaf0]"
+                >
+                  Join the team
+                </a>
+              </div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="border border-[#f3c56b] bg-[#fffaf0] p-5 shadow-sm sm:p-8"
+            >
+              <div className="grid gap-4 sm:grid-cols-3">
+                {[
+                  { icon: DollarSign, title: 'Direct giving', copy: 'Secure donations are processed by Hack Club Bank.' },
+                  { icon: ShieldCheck, title: 'Fiscal support', copy: 'HCB provides nonprofit-backed project finance tools.' },
+                  { icon: Hammer, title: 'Real supplies', copy: 'Every contribution supports student build work.' }
+                ].map(({ icon: Icon, title, copy }) => (
+                  <div key={title} className="border border-[#f4b24a]/14 bg-white p-5">
+                    <Icon className="h-6 w-6 text-[#f97316]" />
+                    <h3 className="mt-6 text-lg font-black text-[#241300]">{title}</h3>
+                    <p className="mt-3 text-sm leading-6 text-[#704214]">{copy}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 border border-[#facc15]/45 bg-white p-5">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#f97316]">Donation link</p>
+                <p className="mt-3 break-words font-mono text-sm text-[#6b3f00]/70">{donationUrl}</p>
+              </div>
+            </motion.div>
           </div>
         </section>
 
