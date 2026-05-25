@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 
 const donationUrl = 'https://hcb.hackclub.com/donations/start/the-kalam-project'
+const signupEndpoint = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL?.trim()
 
 const pillars = [
   { icon: Lightbulb, name: 'Dream', detail: 'Imagine solutions that serve a real community.' },
@@ -99,10 +100,45 @@ function SectionHeading({
 
 function App() {
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    setSubmitted(true)
+    setSubmitError('')
+
+    if (!signupEndpoint) {
+      setSubmitError('The signup form is not connected yet. Add the Google Apps Script web app URL to enable submissions.')
+      return
+    }
+
+    const form = event.currentTarget
+    const data = new FormData(form)
+    const body = new URLSearchParams({
+      name: String(data.get('name') ?? ''),
+      email: String(data.get('email') ?? ''),
+      interest: String(data.get('interest') ?? ''),
+      submittedAt: new Date().toISOString(),
+      source: 'kalam-website'
+    })
+
+    setIsSubmitting(true)
+
+    try {
+      // Apps Script web apps do not return readable cross-origin responses without a proxy.
+      await fetch(signupEndpoint, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body
+      })
+      form.reset()
+      setSubmitted(true)
+    } catch {
+      setSubmitError('We could not send your information right now. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -316,8 +352,9 @@ function App() {
                       <option>Supporting the organization</option>
                     </select>
                   </label>
-                  <button className="button button-primary" type="submit">
-                    Send interest <ArrowRight />
+                  {submitError && <p className="form-error" role="alert">{submitError}</p>}
+                  <button className="button button-primary" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Sending...' : 'Send interest'} <ArrowRight />
                   </button>
                 </>
               )}

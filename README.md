@@ -23,17 +23,33 @@ npm run build
 
 - React 18 with TypeScript
 - TailwindCSS for styling
-- Framer Motion for animations
 - Lucide React for icons
 - Fully responsive design
 - Smooth scroll navigation
-- Interactive application form
+- Google Apps Script-connected involvement form
+
+## Google Apps Script Form
+
+Create a `.env.local` file with your deployed Apps Script web app URL:
+
+```bash
+VITE_GOOGLE_APPS_SCRIPT_URL=https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec
+```
+
+The website submits these form fields with a `POST` request:
+
+- `name`
+- `email`
+- `interest`
+- `submittedAt`
+- `source` (`kalam-website`)
+
+The Apps Script deployment should accept form-encoded POST data in `doPost(e)`, write the values to your sheet, and be deployed as a web app accessible to website visitors.
 
 ## Tech Stack
 
 - **Framework**: React 18
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
-- **Animations**: Framer Motion
 - **Icons**: Lucide React
 - **Build Tool**: Vite
